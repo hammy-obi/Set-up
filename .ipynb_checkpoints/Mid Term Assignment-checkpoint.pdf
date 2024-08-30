@@ -1,0 +1,1827 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "8347cc9b-6ee1-4e2c-8412-1997517482bb",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd \n",
+    "import numpy as np \n",
+    "import matplotlib.pyplot as plt "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "00f44617-b48e-4271-a402-ef872d98bca0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pl = pd.read_csv(\"pulsar_data_set.csv\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "267ca610-b653-440d-8747-ec291fc28662",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Mean of the integrated profile</th>\n",
+       "      <th>Standard deviation of the integrated profile</th>\n",
+       "      <th>Excess kurtosis of the integrated profile</th>\n",
+       "      <th>Skewness of the integrated profile</th>\n",
+       "      <th>Mean of the DM-SNR curve</th>\n",
+       "      <th>Standard deviation of the DM-SNR curve</th>\n",
+       "      <th>Excess kurtosis of the DM-SNR curve</th>\n",
+       "      <th>Skewness of the DM-SNR curve</th>\n",
+       "      <th>target_class</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>121.156250</td>\n",
+       "      <td>48.372971</td>\n",
+       "      <td>0.375485</td>\n",
+       "      <td>-0.013165</td>\n",
+       "      <td>3.168896</td>\n",
+       "      <td>18.399367</td>\n",
+       "      <td>7.449874</td>\n",
+       "      <td>65.159298</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>76.968750</td>\n",
+       "      <td>36.175557</td>\n",
+       "      <td>0.712898</td>\n",
+       "      <td>3.388719</td>\n",
+       "      <td>2.399666</td>\n",
+       "      <td>17.570997</td>\n",
+       "      <td>9.414652</td>\n",
+       "      <td>102.722975</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>130.585938</td>\n",
+       "      <td>53.229534</td>\n",
+       "      <td>0.133408</td>\n",
+       "      <td>-0.297242</td>\n",
+       "      <td>2.743311</td>\n",
+       "      <td>22.362553</td>\n",
+       "      <td>8.508364</td>\n",
+       "      <td>74.031324</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>156.398438</td>\n",
+       "      <td>48.865942</td>\n",
+       "      <td>-0.215989</td>\n",
+       "      <td>-0.171294</td>\n",
+       "      <td>17.471572</td>\n",
+       "      <td>NaN</td>\n",
+       "      <td>2.958066</td>\n",
+       "      <td>7.197842</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>84.804688</td>\n",
+       "      <td>36.117659</td>\n",
+       "      <td>0.825013</td>\n",
+       "      <td>3.274125</td>\n",
+       "      <td>2.790134</td>\n",
+       "      <td>20.618009</td>\n",
+       "      <td>8.405008</td>\n",
+       "      <td>76.291128</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "    Mean of the integrated profile  \\\n",
+       "0                       121.156250   \n",
+       "1                        76.968750   \n",
+       "2                       130.585938   \n",
+       "3                       156.398438   \n",
+       "4                        84.804688   \n",
+       "\n",
+       "    Standard deviation of the integrated profile  \\\n",
+       "0                                      48.372971   \n",
+       "1                                      36.175557   \n",
+       "2                                      53.229534   \n",
+       "3                                      48.865942   \n",
+       "4                                      36.117659   \n",
+       "\n",
+       "    Excess kurtosis of the integrated profile  \\\n",
+       "0                                    0.375485   \n",
+       "1                                    0.712898   \n",
+       "2                                    0.133408   \n",
+       "3                                   -0.215989   \n",
+       "4                                    0.825013   \n",
+       "\n",
+       "    Skewness of the integrated profile   Mean of the DM-SNR curve  \\\n",
+       "0                            -0.013165                   3.168896   \n",
+       "1                             3.388719                   2.399666   \n",
+       "2                            -0.297242                   2.743311   \n",
+       "3                            -0.171294                  17.471572   \n",
+       "4                             3.274125                   2.790134   \n",
+       "\n",
+       "    Standard deviation of the DM-SNR curve  \\\n",
+       "0                                18.399367   \n",
+       "1                                17.570997   \n",
+       "2                                22.362553   \n",
+       "3                                      NaN   \n",
+       "4                                20.618009   \n",
+       "\n",
+       "    Excess kurtosis of the DM-SNR curve   Skewness of the DM-SNR curve  \\\n",
+       "0                              7.449874                      65.159298   \n",
+       "1                              9.414652                     102.722975   \n",
+       "2                              8.508364                      74.031324   \n",
+       "3                              2.958066                       7.197842   \n",
+       "4                              8.405008                      76.291128   \n",
+       "\n",
+       "   target_class  \n",
+       "0           0.0  \n",
+       "1           0.0  \n",
+       "2           0.0  \n",
+       "3           0.0  \n",
+       "4           0.0  "
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "pl.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "c0d03591-5ab1-43b0-833c-a734059726ad",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 12528 entries, 0 to 12527\n",
+      "Data columns (total 9 columns):\n",
+      " #   Column                                         Non-Null Count  Dtype  \n",
+      "---  ------                                         --------------  -----  \n",
+      " 0    Mean of the integrated profile                12528 non-null  float64\n",
+      " 1    Standard deviation of the integrated profile  12528 non-null  float64\n",
+      " 2    Excess kurtosis of the integrated profile     10793 non-null  float64\n",
+      " 3    Skewness of the integrated profile            12528 non-null  float64\n",
+      " 4    Mean of the DM-SNR curve                      12528 non-null  float64\n",
+      " 5    Standard deviation of the DM-SNR curve        11350 non-null  float64\n",
+      " 6    Excess kurtosis of the DM-SNR curve           12528 non-null  float64\n",
+      " 7    Skewness of the DM-SNR curve                  11903 non-null  float64\n",
+      " 8   target_class                                   12528 non-null  float64\n",
+      "dtypes: float64(9)\n",
+      "memory usage: 881.0 KB\n"
+     ]
+    }
+   ],
+   "source": [
+    "pl.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "7587e828-cbef-444d-8457-58934405f303",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(12528, 9)"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "pl.shape"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "fe14e5fa-a79b-4b42-bc08-831440d51a0d",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       " Mean of the integrated profile                     0\n",
+       " Standard deviation of the integrated profile       0\n",
+       " Excess kurtosis of the integrated profile       1735\n",
+       " Skewness of the integrated profile                 0\n",
+       " Mean of the DM-SNR curve                           0\n",
+       " Standard deviation of the DM-SNR curve          1178\n",
+       " Excess kurtosis of the DM-SNR curve                0\n",
+       " Skewness of the DM-SNR curve                     625\n",
+       "target_class                                        0\n",
+       "dtype: int64"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "pl.isnull().sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "d876e424-79ae-4a02-8980-ae9b4f39f006",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "KeyError",
+     "evalue": "'Excess kurtosis of the integrated profile'",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mKeyError\u001b[0m                                  Traceback (most recent call last)",
+      "File \u001b[1;32m~\\anaconda3\\Lib\\site-packages\\pandas\\core\\indexes\\base.py:3805\u001b[0m, in \u001b[0;36mIndex.get_loc\u001b[1;34m(self, key)\u001b[0m\n\u001b[0;32m   3804\u001b[0m \u001b[38;5;28;01mtry\u001b[39;00m:\n\u001b[1;32m-> 3805\u001b[0m     \u001b[38;5;28;01mreturn\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_engine\u001b[38;5;241m.\u001b[39mget_loc(casted_key)\n\u001b[0;32m   3806\u001b[0m \u001b[38;5;28;01mexcept\u001b[39;00m \u001b[38;5;167;01mKeyError\u001b[39;00m \u001b[38;5;28;01mas\u001b[39;00m err:\n",
+      "File \u001b[1;32mindex.pyx:167\u001b[0m, in \u001b[0;36mpandas._libs.index.IndexEngine.get_loc\u001b[1;34m()\u001b[0m\n",
+      "File \u001b[1;32mindex.pyx:196\u001b[0m, in \u001b[0;36mpandas._libs.index.IndexEngine.get_loc\u001b[1;34m()\u001b[0m\n",
+      "File \u001b[1;32mpandas\\\\_libs\\\\hashtable_class_helper.pxi:7081\u001b[0m, in \u001b[0;36mpandas._libs.hashtable.PyObjectHashTable.get_item\u001b[1;34m()\u001b[0m\n",
+      "File \u001b[1;32mpandas\\\\_libs\\\\hashtable_class_helper.pxi:7089\u001b[0m, in \u001b[0;36mpandas._libs.hashtable.PyObjectHashTable.get_item\u001b[1;34m()\u001b[0m\n",
+      "\u001b[1;31mKeyError\u001b[0m: 'Excess kurtosis of the integrated profile'",
+      "\nThe above exception was the direct cause of the following exception:\n",
+      "\u001b[1;31mKeyError\u001b[0m                                  Traceback (most recent call last)",
+      "Cell \u001b[1;32mIn[7], line 1\u001b[0m\n\u001b[1;32m----> 1\u001b[0m pl[\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mExcess kurtosis of the integrated profile\u001b[39m\u001b[38;5;124m\"\u001b[39m]\u001b[38;5;241m.\u001b[39mfillna(pl[\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mExcess kurtosis of the integrated profile\u001b[39m\u001b[38;5;124m\"\u001b[39m]\u001b[38;5;241m.\u001b[39mmedian(), inplace \u001b[38;5;241m=\u001b[39m \u001b[38;5;28;01mTrue\u001b[39;00m)\n",
+      "File \u001b[1;32m~\\anaconda3\\Lib\\site-packages\\pandas\\core\\frame.py:4102\u001b[0m, in \u001b[0;36mDataFrame.__getitem__\u001b[1;34m(self, key)\u001b[0m\n\u001b[0;32m   4100\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mcolumns\u001b[38;5;241m.\u001b[39mnlevels \u001b[38;5;241m>\u001b[39m \u001b[38;5;241m1\u001b[39m:\n\u001b[0;32m   4101\u001b[0m     \u001b[38;5;28;01mreturn\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_getitem_multilevel(key)\n\u001b[1;32m-> 4102\u001b[0m indexer \u001b[38;5;241m=\u001b[39m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mcolumns\u001b[38;5;241m.\u001b[39mget_loc(key)\n\u001b[0;32m   4103\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m is_integer(indexer):\n\u001b[0;32m   4104\u001b[0m     indexer \u001b[38;5;241m=\u001b[39m [indexer]\n",
+      "File \u001b[1;32m~\\anaconda3\\Lib\\site-packages\\pandas\\core\\indexes\\base.py:3812\u001b[0m, in \u001b[0;36mIndex.get_loc\u001b[1;34m(self, key)\u001b[0m\n\u001b[0;32m   3807\u001b[0m     \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;28misinstance\u001b[39m(casted_key, \u001b[38;5;28mslice\u001b[39m) \u001b[38;5;129;01mor\u001b[39;00m (\n\u001b[0;32m   3808\u001b[0m         \u001b[38;5;28misinstance\u001b[39m(casted_key, abc\u001b[38;5;241m.\u001b[39mIterable)\n\u001b[0;32m   3809\u001b[0m         \u001b[38;5;129;01mand\u001b[39;00m \u001b[38;5;28many\u001b[39m(\u001b[38;5;28misinstance\u001b[39m(x, \u001b[38;5;28mslice\u001b[39m) \u001b[38;5;28;01mfor\u001b[39;00m x \u001b[38;5;129;01min\u001b[39;00m casted_key)\n\u001b[0;32m   3810\u001b[0m     ):\n\u001b[0;32m   3811\u001b[0m         \u001b[38;5;28;01mraise\u001b[39;00m InvalidIndexError(key)\n\u001b[1;32m-> 3812\u001b[0m     \u001b[38;5;28;01mraise\u001b[39;00m \u001b[38;5;167;01mKeyError\u001b[39;00m(key) \u001b[38;5;28;01mfrom\u001b[39;00m \u001b[38;5;21;01merr\u001b[39;00m\n\u001b[0;32m   3813\u001b[0m \u001b[38;5;28;01mexcept\u001b[39;00m \u001b[38;5;167;01mTypeError\u001b[39;00m:\n\u001b[0;32m   3814\u001b[0m     \u001b[38;5;66;03m# If we have a listlike key, _check_indexing_error will raise\u001b[39;00m\n\u001b[0;32m   3815\u001b[0m     \u001b[38;5;66;03m#  InvalidIndexError. Otherwise we fall through and re-raise\u001b[39;00m\n\u001b[0;32m   3816\u001b[0m     \u001b[38;5;66;03m#  the TypeError.\u001b[39;00m\n\u001b[0;32m   3817\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_check_indexing_error(key)\n",
+      "\u001b[1;31mKeyError\u001b[0m: 'Excess kurtosis of the integrated profile'"
+     ]
+    }
+   ],
+   "source": [
+    "pl[\"Excess kurtosis of the integrated profile\"].fillna(pl[\"Excess kurtosis of the integrated profile\"].median(), inplace = True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "f61c1c73-023c-4543-8c13-c66c9c6ca7a3",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "KeyError",
+     "evalue": "'Excess kurtosis of the integrated profile'",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[1;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[1;31mKeyError\u001b[0m                                  Traceback (most recent call last)",
+      "File \u001b[1;32m~\\anaconda3\\Lib\\site-packages\\pandas\\core\\indexes\\base.py:3805\u001b[0m, in \u001b[0;36mIndex.get_loc\u001b[1;34m(self, key)\u001b[0m\n\u001b[0;32m   3804\u001b[0m \u001b[38;5;28;01mtry\u001b[39;00m:\n\u001b[1;32m-> 3805\u001b[0m     \u001b[38;5;28;01mreturn\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_engine\u001b[38;5;241m.\u001b[39mget_loc(casted_key)\n\u001b[0;32m   3806\u001b[0m \u001b[38;5;28;01mexcept\u001b[39;00m \u001b[38;5;167;01mKeyError\u001b[39;00m \u001b[38;5;28;01mas\u001b[39;00m err:\n",
+      "File \u001b[1;32mindex.pyx:167\u001b[0m, in \u001b[0;36mpandas._libs.index.IndexEngine.get_loc\u001b[1;34m()\u001b[0m\n",
+      "File \u001b[1;32mindex.pyx:196\u001b[0m, in \u001b[0;36mpandas._libs.index.IndexEngine.get_loc\u001b[1;34m()\u001b[0m\n",
+      "File \u001b[1;32mpandas\\\\_libs\\\\hashtable_class_helper.pxi:7081\u001b[0m, in \u001b[0;36mpandas._libs.hashtable.PyObjectHashTable.get_item\u001b[1;34m()\u001b[0m\n",
+      "File \u001b[1;32mpandas\\\\_libs\\\\hashtable_class_helper.pxi:7089\u001b[0m, in \u001b[0;36mpandas._libs.hashtable.PyObjectHashTable.get_item\u001b[1;34m()\u001b[0m\n",
+      "\u001b[1;31mKeyError\u001b[0m: 'Excess kurtosis of the integrated profile'",
+      "\nThe above exception was the direct cause of the following exception:\n",
+      "\u001b[1;31mKeyError\u001b[0m                                  Traceback (most recent call last)",
+      "Cell \u001b[1;32mIn[8], line 1\u001b[0m\n\u001b[1;32m----> 1\u001b[0m pl[\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mExcess kurtosis of the integrated profile\u001b[39m\u001b[38;5;124m\"\u001b[39m]\u001b[38;5;241m.\u001b[39mmedian()\n",
+      "File \u001b[1;32m~\\anaconda3\\Lib\\site-packages\\pandas\\core\\frame.py:4102\u001b[0m, in \u001b[0;36mDataFrame.__getitem__\u001b[1;34m(self, key)\u001b[0m\n\u001b[0;32m   4100\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mcolumns\u001b[38;5;241m.\u001b[39mnlevels \u001b[38;5;241m>\u001b[39m \u001b[38;5;241m1\u001b[39m:\n\u001b[0;32m   4101\u001b[0m     \u001b[38;5;28;01mreturn\u001b[39;00m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_getitem_multilevel(key)\n\u001b[1;32m-> 4102\u001b[0m indexer \u001b[38;5;241m=\u001b[39m \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39mcolumns\u001b[38;5;241m.\u001b[39mget_loc(key)\n\u001b[0;32m   4103\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m is_integer(indexer):\n\u001b[0;32m   4104\u001b[0m     indexer \u001b[38;5;241m=\u001b[39m [indexer]\n",
+      "File \u001b[1;32m~\\anaconda3\\Lib\\site-packages\\pandas\\core\\indexes\\base.py:3812\u001b[0m, in \u001b[0;36mIndex.get_loc\u001b[1;34m(self, key)\u001b[0m\n\u001b[0;32m   3807\u001b[0m     \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;28misinstance\u001b[39m(casted_key, \u001b[38;5;28mslice\u001b[39m) \u001b[38;5;129;01mor\u001b[39;00m (\n\u001b[0;32m   3808\u001b[0m         \u001b[38;5;28misinstance\u001b[39m(casted_key, abc\u001b[38;5;241m.\u001b[39mIterable)\n\u001b[0;32m   3809\u001b[0m         \u001b[38;5;129;01mand\u001b[39;00m \u001b[38;5;28many\u001b[39m(\u001b[38;5;28misinstance\u001b[39m(x, \u001b[38;5;28mslice\u001b[39m) \u001b[38;5;28;01mfor\u001b[39;00m x \u001b[38;5;129;01min\u001b[39;00m casted_key)\n\u001b[0;32m   3810\u001b[0m     ):\n\u001b[0;32m   3811\u001b[0m         \u001b[38;5;28;01mraise\u001b[39;00m InvalidIndexError(key)\n\u001b[1;32m-> 3812\u001b[0m     \u001b[38;5;28;01mraise\u001b[39;00m \u001b[38;5;167;01mKeyError\u001b[39;00m(key) \u001b[38;5;28;01mfrom\u001b[39;00m \u001b[38;5;21;01merr\u001b[39;00m\n\u001b[0;32m   3813\u001b[0m \u001b[38;5;28;01mexcept\u001b[39;00m \u001b[38;5;167;01mTypeError\u001b[39;00m:\n\u001b[0;32m   3814\u001b[0m     \u001b[38;5;66;03m# If we have a listlike key, _check_indexing_error will raise\u001b[39;00m\n\u001b[0;32m   3815\u001b[0m     \u001b[38;5;66;03m#  InvalidIndexError. Otherwise we fall through and re-raise\u001b[39;00m\n\u001b[0;32m   3816\u001b[0m     \u001b[38;5;66;03m#  the TypeError.\u001b[39;00m\n\u001b[0;32m   3817\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_check_indexing_error(key)\n",
+      "\u001b[1;31mKeyError\u001b[0m: 'Excess kurtosis of the integrated profile'"
+     ]
+    }
+   ],
+   "source": [
+    "pl[\"Excess kurtosis of the integrated profile\"].median()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "9d3ca2a0-9cbb-4c5d-a22f-f4403e4f34bf",
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Index([' Mean of the integrated profile',\n",
+       "       ' Standard deviation of the integrated profile',\n",
+       "       ' Excess kurtosis of the integrated profile',\n",
+       "       ' Skewness of the integrated profile', ' Mean of the DM-SNR curve',\n",
+       "       ' Standard deviation of the DM-SNR curve',\n",
+       "       ' Excess kurtosis of the DM-SNR curve', ' Skewness of the DM-SNR curve',\n",
+       "       'target_class'],\n",
+       "      dtype='object')"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "pl.columns"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "d582bead-d60b-4139-ac89-6bb4f2d14a2a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pl.columns = pl.columns.str.strip()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "5bfff4da-8e7a-4c81-96a6-9140e1a3547b",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Index(['Mean of the integrated profile',\n",
+       "       'Standard deviation of the integrated profile',\n",
+       "       'Excess kurtosis of the integrated profile',\n",
+       "       'Skewness of the integrated profile', 'Mean of the DM-SNR curve',\n",
+       "       'Standard deviation of the DM-SNR curve',\n",
+       "       'Excess kurtosis of the DM-SNR curve', 'Skewness of the DM-SNR curve',\n",
+       "       'target_class'],\n",
+       "      dtype='object')"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "pl.columns"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "3c7f9af2-610f-4c48-815e-330b33300798",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "C:\\Users\\Hammad\\AppData\\Local\\Temp\\ipykernel_16600\\13796506.py:1: FutureWarning: A value is trying to be set on a copy of a DataFrame or Series through chained assignment using an inplace method.\n",
+      "The behavior will change in pandas 3.0. This inplace method will never work because the intermediate object on which we are setting values always behaves as a copy.\n",
+      "\n",
+      "For example, when doing 'df[col].method(value, inplace=True)', try using 'df.method({col: value}, inplace=True)' or df[col] = df[col].method(value) instead, to perform the operation inplace on the original object.\n",
+      "\n",
+      "\n",
+      "  pl[\"Excess kurtosis of the integrated profile\"].fillna(pl[\"Excess kurtosis of the integrated profile\"].median(), inplace = True)\n"
+     ]
+    }
+   ],
+   "source": [
+    "pl[\"Excess kurtosis of the integrated profile\"].fillna(pl[\"Excess kurtosis of the integrated profile\"].median(), inplace = True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "0feb1052-717d-4664-83c1-671e6b0cc552",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "C:\\Users\\Hammad\\AppData\\Local\\Temp\\ipykernel_16600\\3448965324.py:1: FutureWarning: A value is trying to be set on a copy of a DataFrame or Series through chained assignment using an inplace method.\n",
+      "The behavior will change in pandas 3.0. This inplace method will never work because the intermediate object on which we are setting values always behaves as a copy.\n",
+      "\n",
+      "For example, when doing 'df[col].method(value, inplace=True)', try using 'df.method({col: value}, inplace=True)' or df[col] = df[col].method(value) instead, to perform the operation inplace on the original object.\n",
+      "\n",
+      "\n",
+      "  pl[\"Standard deviation of the DM-SNR curve\"].fillna(pl[\"Standard deviation of the DM-SNR curve\"].median(), inplace = True)\n"
+     ]
+    }
+   ],
+   "source": [
+    "pl[\"Standard deviation of the DM-SNR curve\"].fillna(pl[\"Standard deviation of the DM-SNR curve\"].median(), inplace = True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "id": "6ab1f6ba-cb35-4bf9-a665-5aaaab5bdc0f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "C:\\Users\\Hammad\\AppData\\Local\\Temp\\ipykernel_16600\\3300483887.py:1: FutureWarning: A value is trying to be set on a copy of a DataFrame or Series through chained assignment using an inplace method.\n",
+      "The behavior will change in pandas 3.0. This inplace method will never work because the intermediate object on which we are setting values always behaves as a copy.\n",
+      "\n",
+      "For example, when doing 'df[col].method(value, inplace=True)', try using 'df.method({col: value}, inplace=True)' or df[col] = df[col].method(value) instead, to perform the operation inplace on the original object.\n",
+      "\n",
+      "\n",
+      "  pl[\"Skewness of the DM-SNR curve\"].fillna(pl[\"Skewness of the DM-SNR curve\"].median(), inplace = True)\n"
+     ]
+    }
+   ],
+   "source": [
+    "pl[\"Skewness of the DM-SNR curve\"].fillna(pl[\"Skewness of the DM-SNR curve\"].median(), inplace = True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "39fa7148-6490-418b-b16b-47129c59aa58",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 12528 entries, 0 to 12527\n",
+      "Data columns (total 9 columns):\n",
+      " #   Column                                        Non-Null Count  Dtype  \n",
+      "---  ------                                        --------------  -----  \n",
+      " 0   Mean of the integrated profile                12528 non-null  float64\n",
+      " 1   Standard deviation of the integrated profile  12528 non-null  float64\n",
+      " 2   Excess kurtosis of the integrated profile     12528 non-null  float64\n",
+      " 3   Skewness of the integrated profile            12528 non-null  float64\n",
+      " 4   Mean of the DM-SNR curve                      12528 non-null  float64\n",
+      " 5   Standard deviation of the DM-SNR curve        12528 non-null  float64\n",
+      " 6   Excess kurtosis of the DM-SNR curve           12528 non-null  float64\n",
+      " 7   Skewness of the DM-SNR curve                  12528 non-null  float64\n",
+      " 8   target_class                                  12528 non-null  float64\n",
+      "dtypes: float64(9)\n",
+      "memory usage: 881.0 KB\n"
+     ]
+    }
+   ],
+   "source": [
+    "pl.info()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "7fe70a73-9082-470f-96cd-7bdc2a1abd8c",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Mean of the integrated profile</th>\n",
+       "      <th>Standard deviation of the integrated profile</th>\n",
+       "      <th>Excess kurtosis of the integrated profile</th>\n",
+       "      <th>Skewness of the integrated profile</th>\n",
+       "      <th>Mean of the DM-SNR curve</th>\n",
+       "      <th>Standard deviation of the DM-SNR curve</th>\n",
+       "      <th>Excess kurtosis of the DM-SNR curve</th>\n",
+       "      <th>Skewness of the DM-SNR curve</th>\n",
+       "      <th>target_class</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>count</th>\n",
+       "      <td>12528.000000</td>\n",
+       "      <td>12528.000000</td>\n",
+       "      <td>12528.000000</td>\n",
+       "      <td>12528.000000</td>\n",
+       "      <td>12528.000000</td>\n",
+       "      <td>12528.000000</td>\n",
+       "      <td>12528.000000</td>\n",
+       "      <td>12528.000000</td>\n",
+       "      <td>12528.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>mean</th>\n",
+       "      <td>111.041841</td>\n",
+       "      <td>46.521437</td>\n",
+       "      <td>0.443251</td>\n",
+       "      <td>1.778431</td>\n",
+       "      <td>12.674758</td>\n",
+       "      <td>25.604827</td>\n",
+       "      <td>8.333489</td>\n",
+       "      <td>104.408308</td>\n",
+       "      <td>0.092034</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>std</th>\n",
+       "      <td>25.672828</td>\n",
+       "      <td>6.801077</td>\n",
+       "      <td>0.992144</td>\n",
+       "      <td>6.208450</td>\n",
+       "      <td>29.613230</td>\n",
+       "      <td>18.809291</td>\n",
+       "      <td>4.535783</td>\n",
+       "      <td>104.799639</td>\n",
+       "      <td>0.289085</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>min</th>\n",
+       "      <td>5.812500</td>\n",
+       "      <td>24.772042</td>\n",
+       "      <td>-1.738021</td>\n",
+       "      <td>-1.791886</td>\n",
+       "      <td>0.213211</td>\n",
+       "      <td>7.370432</td>\n",
+       "      <td>-3.139270</td>\n",
+       "      <td>-1.976976</td>\n",
+       "      <td>0.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>25%</th>\n",
+       "      <td>100.871094</td>\n",
+       "      <td>42.362222</td>\n",
+       "      <td>0.057820</td>\n",
+       "      <td>-0.188142</td>\n",
+       "      <td>1.910535</td>\n",
+       "      <td>14.761144</td>\n",
+       "      <td>5.803063</td>\n",
+       "      <td>38.128424</td>\n",
+       "      <td>0.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>50%</th>\n",
+       "      <td>115.183594</td>\n",
+       "      <td>46.931022</td>\n",
+       "      <td>0.223678</td>\n",
+       "      <td>0.203317</td>\n",
+       "      <td>2.792642</td>\n",
+       "      <td>18.412402</td>\n",
+       "      <td>8.451097</td>\n",
+       "      <td>83.126301</td>\n",
+       "      <td>0.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>75%</th>\n",
+       "      <td>127.109375</td>\n",
+       "      <td>50.979103</td>\n",
+       "      <td>0.421239</td>\n",
+       "      <td>0.932374</td>\n",
+       "      <td>5.413253</td>\n",
+       "      <td>26.473142</td>\n",
+       "      <td>10.727927</td>\n",
+       "      <td>135.774973</td>\n",
+       "      <td>0.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>max</th>\n",
+       "      <td>189.734375</td>\n",
+       "      <td>91.808628</td>\n",
+       "      <td>8.069522</td>\n",
+       "      <td>68.101622</td>\n",
+       "      <td>222.421405</td>\n",
+       "      <td>110.642211</td>\n",
+       "      <td>34.539844</td>\n",
+       "      <td>1191.000837</td>\n",
+       "      <td>1.000000</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "       Mean of the integrated profile  \\\n",
+       "count                    12528.000000   \n",
+       "mean                       111.041841   \n",
+       "std                         25.672828   \n",
+       "min                          5.812500   \n",
+       "25%                        100.871094   \n",
+       "50%                        115.183594   \n",
+       "75%                        127.109375   \n",
+       "max                        189.734375   \n",
+       "\n",
+       "       Standard deviation of the integrated profile  \\\n",
+       "count                                  12528.000000   \n",
+       "mean                                      46.521437   \n",
+       "std                                        6.801077   \n",
+       "min                                       24.772042   \n",
+       "25%                                       42.362222   \n",
+       "50%                                       46.931022   \n",
+       "75%                                       50.979103   \n",
+       "max                                       91.808628   \n",
+       "\n",
+       "       Excess kurtosis of the integrated profile  \\\n",
+       "count                               12528.000000   \n",
+       "mean                                    0.443251   \n",
+       "std                                     0.992144   \n",
+       "min                                    -1.738021   \n",
+       "25%                                     0.057820   \n",
+       "50%                                     0.223678   \n",
+       "75%                                     0.421239   \n",
+       "max                                     8.069522   \n",
+       "\n",
+       "       Skewness of the integrated profile  Mean of the DM-SNR curve  \\\n",
+       "count                        12528.000000              12528.000000   \n",
+       "mean                             1.778431                 12.674758   \n",
+       "std                              6.208450                 29.613230   \n",
+       "min                             -1.791886                  0.213211   \n",
+       "25%                             -0.188142                  1.910535   \n",
+       "50%                              0.203317                  2.792642   \n",
+       "75%                              0.932374                  5.413253   \n",
+       "max                             68.101622                222.421405   \n",
+       "\n",
+       "       Standard deviation of the DM-SNR curve  \\\n",
+       "count                            12528.000000   \n",
+       "mean                                25.604827   \n",
+       "std                                 18.809291   \n",
+       "min                                  7.370432   \n",
+       "25%                                 14.761144   \n",
+       "50%                                 18.412402   \n",
+       "75%                                 26.473142   \n",
+       "max                                110.642211   \n",
+       "\n",
+       "       Excess kurtosis of the DM-SNR curve  Skewness of the DM-SNR curve  \\\n",
+       "count                         12528.000000                  12528.000000   \n",
+       "mean                              8.333489                    104.408308   \n",
+       "std                               4.535783                    104.799639   \n",
+       "min                              -3.139270                     -1.976976   \n",
+       "25%                               5.803063                     38.128424   \n",
+       "50%                               8.451097                     83.126301   \n",
+       "75%                              10.727927                    135.774973   \n",
+       "max                              34.539844                   1191.000837   \n",
+       "\n",
+       "       target_class  \n",
+       "count  12528.000000  \n",
+       "mean       0.092034  \n",
+       "std        0.289085  \n",
+       "min        0.000000  \n",
+       "25%        0.000000  \n",
+       "50%        0.000000  \n",
+       "75%        0.000000  \n",
+       "max        1.000000  "
+      ]
+     },
+     "execution_count": 17,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "pl.describe()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "1dabdbb9-596e-4afd-a432-4c7374e7ae62",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.model_selection import train_test_split \n",
+    "from pandas.core.common import random_state \n",
+    "from sklearn.preprocessing import StandardScaler "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "id": "9499262c-b764-4680-b430-528988d12b34",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X = pl.iloc[:, :8]\n",
+    "y = pl.iloc[:, 8]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "927bf4d2-6018-4cf1-8e51-b4ecefce35cd",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Mean of the integrated profile</th>\n",
+       "      <th>Standard deviation of the integrated profile</th>\n",
+       "      <th>Excess kurtosis of the integrated profile</th>\n",
+       "      <th>Skewness of the integrated profile</th>\n",
+       "      <th>Mean of the DM-SNR curve</th>\n",
+       "      <th>Standard deviation of the DM-SNR curve</th>\n",
+       "      <th>Excess kurtosis of the DM-SNR curve</th>\n",
+       "      <th>Skewness of the DM-SNR curve</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>121.156250</td>\n",
+       "      <td>48.372971</td>\n",
+       "      <td>0.375485</td>\n",
+       "      <td>-0.013165</td>\n",
+       "      <td>3.168896</td>\n",
+       "      <td>18.399367</td>\n",
+       "      <td>7.449874</td>\n",
+       "      <td>65.159298</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>76.968750</td>\n",
+       "      <td>36.175557</td>\n",
+       "      <td>0.712898</td>\n",
+       "      <td>3.388719</td>\n",
+       "      <td>2.399666</td>\n",
+       "      <td>17.570997</td>\n",
+       "      <td>9.414652</td>\n",
+       "      <td>102.722975</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>130.585938</td>\n",
+       "      <td>53.229534</td>\n",
+       "      <td>0.133408</td>\n",
+       "      <td>-0.297242</td>\n",
+       "      <td>2.743311</td>\n",
+       "      <td>22.362553</td>\n",
+       "      <td>8.508364</td>\n",
+       "      <td>74.031324</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>156.398438</td>\n",
+       "      <td>48.865942</td>\n",
+       "      <td>-0.215989</td>\n",
+       "      <td>-0.171294</td>\n",
+       "      <td>17.471572</td>\n",
+       "      <td>18.412402</td>\n",
+       "      <td>2.958066</td>\n",
+       "      <td>7.197842</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>84.804688</td>\n",
+       "      <td>36.117659</td>\n",
+       "      <td>0.825013</td>\n",
+       "      <td>3.274125</td>\n",
+       "      <td>2.790134</td>\n",
+       "      <td>20.618009</td>\n",
+       "      <td>8.405008</td>\n",
+       "      <td>76.291128</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   Mean of the integrated profile  \\\n",
+       "0                      121.156250   \n",
+       "1                       76.968750   \n",
+       "2                      130.585938   \n",
+       "3                      156.398438   \n",
+       "4                       84.804688   \n",
+       "\n",
+       "   Standard deviation of the integrated profile  \\\n",
+       "0                                     48.372971   \n",
+       "1                                     36.175557   \n",
+       "2                                     53.229534   \n",
+       "3                                     48.865942   \n",
+       "4                                     36.117659   \n",
+       "\n",
+       "   Excess kurtosis of the integrated profile  \\\n",
+       "0                                   0.375485   \n",
+       "1                                   0.712898   \n",
+       "2                                   0.133408   \n",
+       "3                                  -0.215989   \n",
+       "4                                   0.825013   \n",
+       "\n",
+       "   Skewness of the integrated profile  Mean of the DM-SNR curve  \\\n",
+       "0                           -0.013165                  3.168896   \n",
+       "1                            3.388719                  2.399666   \n",
+       "2                           -0.297242                  2.743311   \n",
+       "3                           -0.171294                 17.471572   \n",
+       "4                            3.274125                  2.790134   \n",
+       "\n",
+       "   Standard deviation of the DM-SNR curve  \\\n",
+       "0                               18.399367   \n",
+       "1                               17.570997   \n",
+       "2                               22.362553   \n",
+       "3                               18.412402   \n",
+       "4                               20.618009   \n",
+       "\n",
+       "   Excess kurtosis of the DM-SNR curve  Skewness of the DM-SNR curve  \n",
+       "0                             7.449874                     65.159298  \n",
+       "1                             9.414652                    102.722975  \n",
+       "2                             8.508364                     74.031324  \n",
+       "3                             2.958066                      7.197842  \n",
+       "4                             8.405008                     76.291128  "
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "X.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "aedf8f59-a826-423f-bfba-af84d36e3b43",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0    0.0\n",
+       "1    0.0\n",
+       "2    0.0\n",
+       "3    0.0\n",
+       "4    0.0\n",
+       "Name: target_class, dtype: float64"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "y.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 62,
+   "id": "9e55b10d-f871-4c77-ad53-e9988cbd3085",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.30, random_state = 45)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 63,
+   "id": "de698c3d-f318-4488-af90-574fac4acf1d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "scaler = StandardScaler()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 64,
+   "id": "05d6a806-0f57-4b9d-9512-ea975b3083d3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X_train = scaler.fit_transform(X_train)\n",
+    "X_test = scaler.transform(X_test)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 65,
+   "id": "4b25a33f-89ca-461a-8e87-579afdf752ee",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[ 0.12463556,  1.33619822, -0.21450829, ..., -0.30532346,\n",
+       "        -0.22492686, -0.20624551],\n",
+       "       [-3.57703113, -1.68803184, -0.22158364, ...,  3.19710851,\n",
+       "        -1.6956172 , -1.00731673],\n",
+       "       [ 0.99667901, -0.19017259, -0.63776475, ..., -0.0976848 ,\n",
+       "        -0.28977285, -0.48547706],\n",
+       "       ...,\n",
+       "       [-0.62335534,  0.02113576,  0.62589332, ...,  4.1080842 ,\n",
+       "        -1.78214399, -1.01398291],\n",
+       "       [ 0.10105027,  0.13209671, -0.41885399, ...,  0.00517667,\n",
+       "        -0.30596947, -0.51849678],\n",
+       "       [-0.17400945, -2.10875573,  0.3445774 , ..., -0.12862704,\n",
+       "         0.33847698, -0.08312353]])"
+      ]
+     },
+     "execution_count": 65,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "X_test"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 66,
+   "id": "8572bf32-d66b-4182-aaca-772803afc3c1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.svm import SVC "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 67,
+   "id": "9c4650c2-f723-4628-94e4-25c0ae3cfef2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model = SVC()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 68,
+   "id": "9d9969ad-64bb-4e4b-b678-68b3b93b3f28",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<style>#sk-container-id-2 {\n",
+       "  /* Definition of color scheme common for light and dark mode */\n",
+       "  --sklearn-color-text: black;\n",
+       "  --sklearn-color-line: gray;\n",
+       "  /* Definition of color scheme for unfitted estimators */\n",
+       "  --sklearn-color-unfitted-level-0: #fff5e6;\n",
+       "  --sklearn-color-unfitted-level-1: #f6e4d2;\n",
+       "  --sklearn-color-unfitted-level-2: #ffe0b3;\n",
+       "  --sklearn-color-unfitted-level-3: chocolate;\n",
+       "  /* Definition of color scheme for fitted estimators */\n",
+       "  --sklearn-color-fitted-level-0: #f0f8ff;\n",
+       "  --sklearn-color-fitted-level-1: #d4ebff;\n",
+       "  --sklearn-color-fitted-level-2: #b3dbfd;\n",
+       "  --sklearn-color-fitted-level-3: cornflowerblue;\n",
+       "\n",
+       "  /* Specific color for light theme */\n",
+       "  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));\n",
+       "  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));\n",
+       "  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));\n",
+       "  --sklearn-color-icon: #696969;\n",
+       "\n",
+       "  @media (prefers-color-scheme: dark) {\n",
+       "    /* Redefinition of color scheme for dark theme */\n",
+       "    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));\n",
+       "    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));\n",
+       "    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));\n",
+       "    --sklearn-color-icon: #878787;\n",
+       "  }\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 {\n",
+       "  color: var(--sklearn-color-text);\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 pre {\n",
+       "  padding: 0;\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 input.sk-hidden--visually {\n",
+       "  border: 0;\n",
+       "  clip: rect(1px 1px 1px 1px);\n",
+       "  clip: rect(1px, 1px, 1px, 1px);\n",
+       "  height: 1px;\n",
+       "  margin: -1px;\n",
+       "  overflow: hidden;\n",
+       "  padding: 0;\n",
+       "  position: absolute;\n",
+       "  width: 1px;\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-dashed-wrapped {\n",
+       "  border: 1px dashed var(--sklearn-color-line);\n",
+       "  margin: 0 0.4em 0.5em 0.4em;\n",
+       "  box-sizing: border-box;\n",
+       "  padding-bottom: 0.4em;\n",
+       "  background-color: var(--sklearn-color-background);\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-container {\n",
+       "  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`\n",
+       "     but bootstrap.min.css set `[hidden] { display: none !important; }`\n",
+       "     so we also need the `!important` here to be able to override the\n",
+       "     default hidden behavior on the sphinx rendered scikit-learn.org.\n",
+       "     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */\n",
+       "  display: inline-block !important;\n",
+       "  position: relative;\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-text-repr-fallback {\n",
+       "  display: none;\n",
+       "}\n",
+       "\n",
+       "div.sk-parallel-item,\n",
+       "div.sk-serial,\n",
+       "div.sk-item {\n",
+       "  /* draw centered vertical line to link estimators */\n",
+       "  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));\n",
+       "  background-size: 2px 100%;\n",
+       "  background-repeat: no-repeat;\n",
+       "  background-position: center center;\n",
+       "}\n",
+       "\n",
+       "/* Parallel-specific style estimator block */\n",
+       "\n",
+       "#sk-container-id-2 div.sk-parallel-item::after {\n",
+       "  content: \"\";\n",
+       "  width: 100%;\n",
+       "  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);\n",
+       "  flex-grow: 1;\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-parallel {\n",
+       "  display: flex;\n",
+       "  align-items: stretch;\n",
+       "  justify-content: center;\n",
+       "  background-color: var(--sklearn-color-background);\n",
+       "  position: relative;\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-parallel-item {\n",
+       "  display: flex;\n",
+       "  flex-direction: column;\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-parallel-item:first-child::after {\n",
+       "  align-self: flex-end;\n",
+       "  width: 50%;\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-parallel-item:last-child::after {\n",
+       "  align-self: flex-start;\n",
+       "  width: 50%;\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-parallel-item:only-child::after {\n",
+       "  width: 0;\n",
+       "}\n",
+       "\n",
+       "/* Serial-specific style estimator block */\n",
+       "\n",
+       "#sk-container-id-2 div.sk-serial {\n",
+       "  display: flex;\n",
+       "  flex-direction: column;\n",
+       "  align-items: center;\n",
+       "  background-color: var(--sklearn-color-background);\n",
+       "  padding-right: 1em;\n",
+       "  padding-left: 1em;\n",
+       "}\n",
+       "\n",
+       "\n",
+       "/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is\n",
+       "clickable and can be expanded/collapsed.\n",
+       "- Pipeline and ColumnTransformer use this feature and define the default style\n",
+       "- Estimators will overwrite some part of the style using the `sk-estimator` class\n",
+       "*/\n",
+       "\n",
+       "/* Pipeline and ColumnTransformer style (default) */\n",
+       "\n",
+       "#sk-container-id-2 div.sk-toggleable {\n",
+       "  /* Default theme specific background. It is overwritten whether we have a\n",
+       "  specific estimator or a Pipeline/ColumnTransformer */\n",
+       "  background-color: var(--sklearn-color-background);\n",
+       "}\n",
+       "\n",
+       "/* Toggleable label */\n",
+       "#sk-container-id-2 label.sk-toggleable__label {\n",
+       "  cursor: pointer;\n",
+       "  display: block;\n",
+       "  width: 100%;\n",
+       "  margin-bottom: 0;\n",
+       "  padding: 0.5em;\n",
+       "  box-sizing: border-box;\n",
+       "  text-align: center;\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 label.sk-toggleable__label-arrow:before {\n",
+       "  /* Arrow on the left of the label */\n",
+       "  content: \"▸\";\n",
+       "  float: left;\n",
+       "  margin-right: 0.25em;\n",
+       "  color: var(--sklearn-color-icon);\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {\n",
+       "  color: var(--sklearn-color-text);\n",
+       "}\n",
+       "\n",
+       "/* Toggleable content - dropdown */\n",
+       "\n",
+       "#sk-container-id-2 div.sk-toggleable__content {\n",
+       "  max-height: 0;\n",
+       "  max-width: 0;\n",
+       "  overflow: hidden;\n",
+       "  text-align: left;\n",
+       "  /* unfitted */\n",
+       "  background-color: var(--sklearn-color-unfitted-level-0);\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-toggleable__content.fitted {\n",
+       "  /* fitted */\n",
+       "  background-color: var(--sklearn-color-fitted-level-0);\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-toggleable__content pre {\n",
+       "  margin: 0.2em;\n",
+       "  border-radius: 0.25em;\n",
+       "  color: var(--sklearn-color-text);\n",
+       "  /* unfitted */\n",
+       "  background-color: var(--sklearn-color-unfitted-level-0);\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-toggleable__content.fitted pre {\n",
+       "  /* unfitted */\n",
+       "  background-color: var(--sklearn-color-fitted-level-0);\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {\n",
+       "  /* Expand drop-down */\n",
+       "  max-height: 200px;\n",
+       "  max-width: 100%;\n",
+       "  overflow: auto;\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {\n",
+       "  content: \"▾\";\n",
+       "}\n",
+       "\n",
+       "/* Pipeline/ColumnTransformer-specific style */\n",
+       "\n",
+       "#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {\n",
+       "  color: var(--sklearn-color-text);\n",
+       "  background-color: var(--sklearn-color-unfitted-level-2);\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {\n",
+       "  background-color: var(--sklearn-color-fitted-level-2);\n",
+       "}\n",
+       "\n",
+       "/* Estimator-specific style */\n",
+       "\n",
+       "/* Colorize estimator box */\n",
+       "#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {\n",
+       "  /* unfitted */\n",
+       "  background-color: var(--sklearn-color-unfitted-level-2);\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {\n",
+       "  /* fitted */\n",
+       "  background-color: var(--sklearn-color-fitted-level-2);\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-label label.sk-toggleable__label,\n",
+       "#sk-container-id-2 div.sk-label label {\n",
+       "  /* The background is the default theme color */\n",
+       "  color: var(--sklearn-color-text-on-default-background);\n",
+       "}\n",
+       "\n",
+       "/* On hover, darken the color of the background */\n",
+       "#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {\n",
+       "  color: var(--sklearn-color-text);\n",
+       "  background-color: var(--sklearn-color-unfitted-level-2);\n",
+       "}\n",
+       "\n",
+       "/* Label box, darken color on hover, fitted */\n",
+       "#sk-container-id-2 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {\n",
+       "  color: var(--sklearn-color-text);\n",
+       "  background-color: var(--sklearn-color-fitted-level-2);\n",
+       "}\n",
+       "\n",
+       "/* Estimator label */\n",
+       "\n",
+       "#sk-container-id-2 div.sk-label label {\n",
+       "  font-family: monospace;\n",
+       "  font-weight: bold;\n",
+       "  display: inline-block;\n",
+       "  line-height: 1.2em;\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-label-container {\n",
+       "  text-align: center;\n",
+       "}\n",
+       "\n",
+       "/* Estimator-specific */\n",
+       "#sk-container-id-2 div.sk-estimator {\n",
+       "  font-family: monospace;\n",
+       "  border: 1px dotted var(--sklearn-color-border-box);\n",
+       "  border-radius: 0.25em;\n",
+       "  box-sizing: border-box;\n",
+       "  margin-bottom: 0.5em;\n",
+       "  /* unfitted */\n",
+       "  background-color: var(--sklearn-color-unfitted-level-0);\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-estimator.fitted {\n",
+       "  /* fitted */\n",
+       "  background-color: var(--sklearn-color-fitted-level-0);\n",
+       "}\n",
+       "\n",
+       "/* on hover */\n",
+       "#sk-container-id-2 div.sk-estimator:hover {\n",
+       "  /* unfitted */\n",
+       "  background-color: var(--sklearn-color-unfitted-level-2);\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 div.sk-estimator.fitted:hover {\n",
+       "  /* fitted */\n",
+       "  background-color: var(--sklearn-color-fitted-level-2);\n",
+       "}\n",
+       "\n",
+       "/* Specification for estimator info (e.g. \"i\" and \"?\") */\n",
+       "\n",
+       "/* Common style for \"i\" and \"?\" */\n",
+       "\n",
+       ".sk-estimator-doc-link,\n",
+       "a:link.sk-estimator-doc-link,\n",
+       "a:visited.sk-estimator-doc-link {\n",
+       "  float: right;\n",
+       "  font-size: smaller;\n",
+       "  line-height: 1em;\n",
+       "  font-family: monospace;\n",
+       "  background-color: var(--sklearn-color-background);\n",
+       "  border-radius: 1em;\n",
+       "  height: 1em;\n",
+       "  width: 1em;\n",
+       "  text-decoration: none !important;\n",
+       "  margin-left: 1ex;\n",
+       "  /* unfitted */\n",
+       "  border: var(--sklearn-color-unfitted-level-1) 1pt solid;\n",
+       "  color: var(--sklearn-color-unfitted-level-1);\n",
+       "}\n",
+       "\n",
+       ".sk-estimator-doc-link.fitted,\n",
+       "a:link.sk-estimator-doc-link.fitted,\n",
+       "a:visited.sk-estimator-doc-link.fitted {\n",
+       "  /* fitted */\n",
+       "  border: var(--sklearn-color-fitted-level-1) 1pt solid;\n",
+       "  color: var(--sklearn-color-fitted-level-1);\n",
+       "}\n",
+       "\n",
+       "/* On hover */\n",
+       "div.sk-estimator:hover .sk-estimator-doc-link:hover,\n",
+       ".sk-estimator-doc-link:hover,\n",
+       "div.sk-label-container:hover .sk-estimator-doc-link:hover,\n",
+       ".sk-estimator-doc-link:hover {\n",
+       "  /* unfitted */\n",
+       "  background-color: var(--sklearn-color-unfitted-level-3);\n",
+       "  color: var(--sklearn-color-background);\n",
+       "  text-decoration: none;\n",
+       "}\n",
+       "\n",
+       "div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,\n",
+       ".sk-estimator-doc-link.fitted:hover,\n",
+       "div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,\n",
+       ".sk-estimator-doc-link.fitted:hover {\n",
+       "  /* fitted */\n",
+       "  background-color: var(--sklearn-color-fitted-level-3);\n",
+       "  color: var(--sklearn-color-background);\n",
+       "  text-decoration: none;\n",
+       "}\n",
+       "\n",
+       "/* Span, style for the box shown on hovering the info icon */\n",
+       ".sk-estimator-doc-link span {\n",
+       "  display: none;\n",
+       "  z-index: 9999;\n",
+       "  position: relative;\n",
+       "  font-weight: normal;\n",
+       "  right: .2ex;\n",
+       "  padding: .5ex;\n",
+       "  margin: .5ex;\n",
+       "  width: min-content;\n",
+       "  min-width: 20ex;\n",
+       "  max-width: 50ex;\n",
+       "  color: var(--sklearn-color-text);\n",
+       "  box-shadow: 2pt 2pt 4pt #999;\n",
+       "  /* unfitted */\n",
+       "  background: var(--sklearn-color-unfitted-level-0);\n",
+       "  border: .5pt solid var(--sklearn-color-unfitted-level-3);\n",
+       "}\n",
+       "\n",
+       ".sk-estimator-doc-link.fitted span {\n",
+       "  /* fitted */\n",
+       "  background: var(--sklearn-color-fitted-level-0);\n",
+       "  border: var(--sklearn-color-fitted-level-3);\n",
+       "}\n",
+       "\n",
+       ".sk-estimator-doc-link:hover span {\n",
+       "  display: block;\n",
+       "}\n",
+       "\n",
+       "/* \"?\"-specific style due to the `<a>` HTML tag */\n",
+       "\n",
+       "#sk-container-id-2 a.estimator_doc_link {\n",
+       "  float: right;\n",
+       "  font-size: 1rem;\n",
+       "  line-height: 1em;\n",
+       "  font-family: monospace;\n",
+       "  background-color: var(--sklearn-color-background);\n",
+       "  border-radius: 1rem;\n",
+       "  height: 1rem;\n",
+       "  width: 1rem;\n",
+       "  text-decoration: none;\n",
+       "  /* unfitted */\n",
+       "  color: var(--sklearn-color-unfitted-level-1);\n",
+       "  border: var(--sklearn-color-unfitted-level-1) 1pt solid;\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 a.estimator_doc_link.fitted {\n",
+       "  /* fitted */\n",
+       "  border: var(--sklearn-color-fitted-level-1) 1pt solid;\n",
+       "  color: var(--sklearn-color-fitted-level-1);\n",
+       "}\n",
+       "\n",
+       "/* On hover */\n",
+       "#sk-container-id-2 a.estimator_doc_link:hover {\n",
+       "  /* unfitted */\n",
+       "  background-color: var(--sklearn-color-unfitted-level-3);\n",
+       "  color: var(--sklearn-color-background);\n",
+       "  text-decoration: none;\n",
+       "}\n",
+       "\n",
+       "#sk-container-id-2 a.estimator_doc_link.fitted:hover {\n",
+       "  /* fitted */\n",
+       "  background-color: var(--sklearn-color-fitted-level-3);\n",
+       "}\n",
+       "</style><div id=\"sk-container-id-2\" class=\"sk-top-container\"><div class=\"sk-text-repr-fallback\"><pre>SVC()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class=\"sk-container\" hidden><div class=\"sk-item\"><div class=\"sk-estimator fitted sk-toggleable\"><input class=\"sk-toggleable__control sk-hidden--visually\" id=\"sk-estimator-id-2\" type=\"checkbox\" checked><label for=\"sk-estimator-id-2\" class=\"sk-toggleable__label fitted sk-toggleable__label-arrow fitted\">&nbsp;&nbsp;SVC<a class=\"sk-estimator-doc-link fitted\" rel=\"noreferrer\" target=\"_blank\" href=\"https://scikit-learn.org/1.4/modules/generated/sklearn.svm.SVC.html\">?<span>Documentation for SVC</span></a><span class=\"sk-estimator-doc-link fitted\">i<span>Fitted</span></span></label><div class=\"sk-toggleable__content fitted\"><pre>SVC()</pre></div> </div></div></div></div>"
+      ],
+      "text/plain": [
+       "SVC()"
+      ]
+     },
+     "execution_count": 68,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.fit(X_train, y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 69,
+   "id": "a78723aa-8bdf-4e73-8282-7f38e9f967de",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "y_pred = model.predict(X_test)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 70,
+   "id": "05332284-48ba-4e96-bff3-f7f72070d6b8",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.metrics import accuracy_score "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 71,
+   "id": "95f34e26-2ef8-4c65-8497-b034fbbca2ba",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.9765895184889598"
+      ]
+     },
+     "execution_count": 71,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "accuracy_score(y_test, y_pred)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 72,
+   "id": "c5989957-28d9-4c2e-9f37-cf64a7f27ff2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.metrics import confusion_matrix, classification_report"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 73,
+   "id": "8f2739ea-de85-4ab8-81ed-fc700eeba5c8",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Confusion Matrix: \n",
+      " [[3396   13]\n",
+      " [  75  275]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"Confusion Matrix: \\n\", confusion_matrix(y_test, y_pred)) "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 74,
+   "id": "81464924-fe76-4f1e-bb17-5cb4da9c1dad",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Classification Report: \n",
+      "               precision    recall  f1-score   support\n",
+      "\n",
+      "         0.0       0.98      1.00      0.99      3409\n",
+      "         1.0       0.95      0.79      0.86       350\n",
+      "\n",
+      "    accuracy                           0.98      3759\n",
+      "   macro avg       0.97      0.89      0.92      3759\n",
+      "weighted avg       0.98      0.98      0.98      3759\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"Classification Report: \\n\", classification_report(y_test, y_pred)) "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 75,
+   "id": "545080d8-1050-4633-8380-b8db4152e76a",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "8828     0.0\n",
+       "2596     1.0\n",
+       "6840     0.0\n",
+       "2827     0.0\n",
+       "5609     0.0\n",
+       "        ... \n",
+       "8877     0.0\n",
+       "12054    0.0\n",
+       "9869     1.0\n",
+       "10996    0.0\n",
+       "10374    0.0\n",
+       "Name: target_class, Length: 3759, dtype: float64"
+      ]
+     },
+     "execution_count": 75,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "y_test"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 76,
+   "id": "dab994af-df8b-4e0b-a709-7338a9bbb8e9",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([0., 1.])"
+      ]
+     },
+     "execution_count": 76,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "np.unique(y_pred)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 77,
+   "id": "fee9ebe5-4762-4543-918a-d9566a5036ca",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([0., 1., 0., ..., 0., 0., 0.])"
+      ]
+     },
+     "execution_count": 77,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "y_pred "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 78,
+   "id": "7fc0e5b1-00ee-4608-9f1b-0ae978c72e27",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([0., 1.])"
+      ]
+     },
+     "execution_count": 78,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "y_test.unique()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 79,
+   "id": "adc8a826-3225-442a-8d29-d038c681051b",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "pandas.core.series.Series"
+      ]
+     },
+     "execution_count": 79,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "type(y_test)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 80,
+   "id": "d8f3ad03-c195-4460-a74b-ed9977318bf2",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "target_class\n",
+       "0.0    3409\n",
+       "1.0     350\n",
+       "Name: count, dtype: int64"
+      ]
+     },
+     "execution_count": 80,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "y_test.value_counts()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 81,
+   "id": "b22b3e38-3c07-4aff-a783-51072a1120b7",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "target_class\n",
+       "0.0    7966\n",
+       "1.0     803\n",
+       "Name: count, dtype: int64"
+      ]
+     },
+     "execution_count": 81,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "y_train.value_counts()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 85,
+   "id": "4141cf8b-1ca3-41a6-a37e-3474e34040fd",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAA6EAAAKnCAYAAAB3dUuDAAAAOXRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjguNCwgaHR0cHM6Ly9tYXRwbG90bGliLm9yZy8fJSN1AAAACXBIWXMAAA9hAAAPYQGoP6dpAABGD0lEQVR4nO3de5hVdb0/8PfEZQTESUBmmLxEeQnDPIYdxJMXvCAmEllpYaRp3m+EpsfsYqeUNJMs8pKlJGrUT8NuRmIm6lG8kJTXNC8pygAqoBBnIGb//vC4OyNuBdqsDdPr1bOeZ/Za373WZ+Z58vHj+7u+37pSqVQKAAAAFOBttS4AAACAfx2aUAAAAAqjCQUAAKAwmlAAAAAKowkFAACgMJpQAAAACqMJBQAAoDCaUAAAAAqjCQUAAKAwnWtdwLqw4oUna10CAFXQrXm3WpcAQBX8fflztS5hrdWyt+jS5101e/a6JAkFAACgMB0yCQUAAKiKtpW1rqDDkYQCAABQGE0oAAAAhTEdFwAAoJJSW60r6HAkoQAAABRGEgoAAFBJmyS02iShAAAAFEYSCgAAUEHJO6FVJwkFAACgMJpQAAAACmM6LgAAQCUWJqo6SSgAAACFkYQCAABUYmGiqpOEAgAAUBhNKAAAAIUxHRcAAKCStpW1rqDDkYQCAABQGEkoAABAJRYmqjpJKAAAAIWRhAIAAFTSJgmtNkkoAAAAhdGEAgAAUBjTcQEAACooWZio6iShAAAAFEYSCgAAUImFiapOEgoAAEBhNKEAAAAUxnRcAACASixMVHWSUAAAAAojCQUAAKikbWWtK+hwJKEAAAAURhIKAABQiXdCq04SCgAAQGE0oQAAABTGdFwAAIBK2kzHrTZJKAAAAIWRhAIAAFRiYaKqk4QCAABQGE0oAAAAhTEdFwAAoBILE1WdJBQAAIDCSEIBAAAqKJVW1rqEDkcSCgAAQGEkoQAAAJXYoqXqJKEAAAAURhMKAABAYUzHBQAAqMQWLVUnCQUAAKAwklAAAIBKLExUdZJQAAAACqMJBQAAoDCm4wIAAFTStrLWFXQ4klAAAAAKIwkFAACoxMJEVScJBQAAoDCSUAAAgEraJKHVJgkFAACgMJpQAAAACmM6LgAAQCUWJqo6SSgAAACFkYQCAABUYmGiqpOEAgAAUBhNKAAAAIUxHRcAAKAS03GrThIKAABAYSShAAAAFZRKK2tdQocjCQUAANiAXXLJJXnf+96XTTbZJJtsskmGDBmS3/zmN+XrpVIpZ599dpqbm9OtW7fsueeeeeihh9rdo7W1NSeddFL69OmTHj16ZOTIkZkzZ067MQsXLsyYMWPS0NCQhoaGjBkzJosWLVrjejWhAAAAG7DNN9883/jGN3Lfffflvvvuy1577ZUPf/jD5Ubz/PPPz4UXXpiJEyfm3nvvTVNTU/bdd9+88sor5XuMHTs2U6dOzZQpU3LHHXdkyZIlGTFiRFau/EcSPHr06MyePTvTpk3LtGnTMnv27IwZM2aN660rlUqlf/7XXr+seOHJWpcAQBV0a96t1iUAUAV/X/5crUtYa8tuvaJmz+625xFr/d1evXrlm9/8Zo444og0Nzdn7NixOeOMM5K8mno2NjbmvPPOyzHHHJPFixdns802y+TJk3PIIYckSZ5//vlsscUWufHGG7PffvvlkUceyfbbb5+ZM2dm8ODBSZKZM2dmyJAhefTRR7Pddtutdm2SUAAAgPVQa2trXn755XZHa2vrm35n5cqVmTJlSpYuXZohQ4bkqaeeSktLS4YNG1YeU19fnz322CN33nlnkmTWrFlZsWJFuzHNzc0ZOHBgecxdd92VhoaGcgOaJLvssksaGhrKY1aXJhQAAKCSUlvNjvHjx5ffv3ztGD9+/BuW+cADD2TjjTdOfX19jj322EydOjXbb799WlpakiSNjY3txjc2NpavtbS0pGvXrtl0003fdEzfvn1XeW7fvn3LY1aX1XEBAADWQ2eeeWbGjRvX7lx9ff0bjt1uu+0ye/bsLFq0KNdff30OO+ywzJgxo3y9rq6u3fhSqbTKudd7/Zg3Gr8693k9TSgAAEAlbW01e3R9fX3FpvP1unbtmq233jpJsvPOO+fee+/NRRddVH4PtKWlJf369SuPnz9/fjkdbWpqyvLly7Nw4cJ2aej8+fOz6667lsfMmzdvlecuWLBglZT1rZiOCwAA0MGUSqW0tramf//+aWpqyvTp08vXli9fnhkzZpQbzEGDBqVLly7txsydOzcPPvhgecyQIUOyePHi3HPPPeUxd999dxYvXlwes7okoQAAABuwL3zhC9l///2zxRZb5JVXXsmUKVNy6623Ztq0aamrq8vYsWNz7rnnZptttsk222yTc889N927d8/o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qtVuQocMGZLLL788c+fOzTHHHJMpU6bkHe94R9ra2jJ9+vS88sor67JOAAAAOoA1Xh23e/fuOeKII3LHHXfkgQceyKmnnppvfOMb6du3b0aOHLkuagQAAKiJUupqdnRUa71FS5Jst912Of/88zNnzpz8+Mc/rlZNAAAAdFD/VBP6mk6dOmXUqFH5xS9+UY3bAQAA0EGt0T6hAAAA/0raal1AB1SVJBQAAABWhyQUAACggo68QFCtSEIBAAAojCYUAACAwpiOCwAAUIGFiapPEgoAAEBhJKEAAAAVSEKrTxIKAABAYTShAAAAFZRSV7NjTdx222058MAD09zcnLq6utxwww3trh9++OGpq6trd+yyyy7txrS2tuakk05Knz590qNHj4wcOTJz5sxpN2bhwoUZM2ZMGhoa0tDQkDFjxmTRokVrVKsmFAAAYAO3dOnS7Ljjjpk4cWLFMcOHD8/cuXPLx4033tju+tixYzN16tRMmTIld9xxR5YsWZIRI0Zk5cqV5TGjR4/O7NmzM23atEybNi2zZ8/OmDFj1qhW74QCAABs4Pbff//sv//+bzqmvr4+TU1Nb3ht8eLF+eEPf5jJkydnn332SZJcffXV2WKLLXLzzTdnv/32yyOPPJJp06Zl5syZGTx4cJLk8ssvz5AhQ/LnP/8522233WrVKgkFAACooK2udkdra2tefvnldkdra+ta/y633npr+vbtm2233TZHHXVU5s+fX742a9asrFixIsOGDSufa25uzsCBA3PnnXcmSe666640NDSUG9Ak2WWXXdLQ0FAeszo0oQAAAOuh8ePHl9+9fO0YP378Wt1r//33zzXXXJNbbrkl3/rWt3Lvvfdmr732Kje1LS0t6dq1azbddNN232tsbExLS0t5TN++fVe5d9++fctjVofpuAAAABW0reECQdV05plnZty4ce3O1dfXr9W9DjnkkPLPAwcOzM4775ytttoqv/71r3PQQQdV/F6pVEpd3T/+Bv/350pj3oomFAAAYD1UX1+/1k3nW+nXr1+22mqrPP7440mSpqamLF++PAsXLmyXhs6fPz+77rprecy8efNWudeCBQvS2Ni42s82HRcAAOBfzIsvvphnn302/fr1S5IMGjQoXbp0yfTp08tj5s6dmwcffLDchA4ZMiSLFy/OPffcUx5z9913Z/HixeUxq0MSCgAAUEGp1gWspiVLluQvf/lL+fNTTz2V2bNnp1evXunVq1fOPvvsfPSjH02/fv3y9NNP5wtf+EL69OmTj3zkI0mShoaGHHnkkTn11FPTu3fv9OrVK6eddlp22GGH8mq5AwYMyPDhw3PUUUflsssuS5IcffTRGTFixGqvjJtoQgEAADZ49913X4YOHVr+/Nq7pIcddlguueSSPPDAA7nqqquyaNGi9OvXL0OHDs1PfvKT9OzZs/ydCRMmpHPnzjn44IOzbNmy7L333pk0aVI6depUHnPNNdfk5JNPLq+iO3LkyDfdm/SN1JVKpQ2luV9tG220Za1LAKAK+nZvqHUJAFTBMy89UOsS1trPmkbX7NkHtVxbs2evS94JBQAAoDCm4wIAAFTQtgZbj7B6JKEAAAAURhMKAABAYUzHBQAAqKDDreK6HpCEAgAAUBhJKAAAQAVttS6gA5KEAgAAUBhNKAAAAIUxHRcAAKCCNtuEVp0kFAAAgMJIQgEAACpoiyi02iShAAAAFEYSCgAAUEGp1gV0QJJQAAAACqMJBQAAoDCm4wIAAFRgi5bqk4QCAABQGEkoAABABW21LqADkoQCAABQGE0oAAAAhTEdFwAAoAL7hFafJBQAAIDCSEIBAAAqsEVL9UlCAQAAKIwmFAAAgMKYjgsAAFCBfUKrTxIKAABAYSShAAAAFUhCq08SCgAAQGEkoQAAABWUbNFSdZJQAAAACqMJBQAAoDCm4wIAAFRgYaLqk4QCAABQGEkoAABABZLQ6pOEAgAAUBhNKAAAAIUxHRcAAKCCUq0L6IAkoQAAABRGEgoAAFBBW12tK+h4JKEAAAAURhIKAABQgS1aqk8SCgAAQGE0oQAAABTGdFwAAIAKTMetPkkoAAAAhZGEAgAAVFCqdQEdkCQUAACAwmhCAQAAKIzpuAAAABW01dW6go5HEgoAAEBhJKEAAAAV2KKl+iShAAAAFEYSCgAAUIEtWqpPEgoAAEBhNKEAAAAUxnRcAACACtpMyK06SSgAAACFkYQCAABUYIuW6pOEAgAAUBhNKAAAAIUxHRcAAKACyxJVnyQUAACAwkhCAQAAKrAwUfVJQgEAACiMJBQAAKCCtrpaV9DxSEIBAAAojCYUAACAwpiOCwAAUEGbTVqqThIKAABAYSShAAAAFchBq08SCgAAQGE0oQAAABTGdFwAAIAK2mpdQAckCQUAAKAwklAAAIAKbNFSfZJQAAAACiMJBQAAqEAOWn2SUAAAAAqjCQUAANjA3XbbbTnwwAPT3Nycurq63HDDDe2ul0qlnH322Wlubk63bt2y55575qGHHmo3prW1NSeddFL69OmTHj16ZOTIkZkzZ067MQsXLsyYMWPS0NCQhoaGjBkzJosWLVqjWjWhAAAAFbTV8FgTS5cuzY477piJEye+4fXzzz8/F154YSZOnJh77703TU1N2XffffPKK6+Ux4wdOzZTp07NlClTcscdd2TJkiUZMWJEVq5cWR4zevTozJ49O9OmTcu0adMye/bsjBkzZo1qrSuVSh1umvNGG21Z6xIAqIK+3RtqXQIAVfDMSw/UuoS1dto7P1mzZ1/w9I/X6nt1dXWZOnVqRo0aleTVFLS5uTljx47NGWeckeTV1LOxsTHnnXdejjnmmCxevDibbbZZJk+enEMOOSRJ8vzzz2eLLbbIjTfemP322y+PPPJItt9++8ycOTODBw9OksycOTNDhgzJo48+mu2222616pOEAgAAVNCWUs2O1tbWvPzyy+2O1tbWNf4dnnrqqbS0tGTYsGHlc/X19dljjz1y5513JklmzZqVFStWtBvT3NycgQMHlsfcddddaWhoKDegSbLLLrukoaGhPGZ1aEIBAADWQ+PHjy+/e/naMX78+DW+T0tLS5KksbGx3fnGxsbytZaWlnTt2jWbbrrpm47p27fvKvfv27dveczqsEULAADAeujMM8/MuHHj2p2rr69f6/vV1dW1+1wqlVY593qvH/NG41fnPv+XJBQAAKCCUg2P+vr6bLLJJu2OtWlCm5qakmSVtHL+/PnldLSpqSnLly/PwoUL33TMvHnzVrn/ggULVklZ34wmFAAAoAPr379/mpqaMn369PK55cuXZ8aMGdl1112TJIMGDUqXLl3ajZk7d24efPDB8pghQ4Zk8eLFueeee8pj7r777ixevLg8ZnWYjgsAAFDBmm6VUitLlizJX/7yl/Lnp556KrNnz06vXr2y5ZZbZuzYsTn33HOzzTbbZJtttsm5556b7t27Z/To0UmShoaGHHnkkTn11FPTu3fv9OrVK6eddlp22GGH7LPPPkmSAQMGZPjw4TnqqKNy2WWXJUmOPvrojBgxYrVXxk00oQAAABu8++67L0OHDi1/fu1d0sMOOyyTJk3K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UAAAAAqjCQUAAKAwpuMCAABUYDpu9UlCAQAANmBnn3126urq2h1NTU3l66VSKWeffXaam5vTrVu37LnnnnnooYfa3aO1tTUnnXRS+vTpkx49emTkyJGZM2fOOqlXEwoAAFBBqVSq2bEm3vve92bu3Lnl44EHHihfO//883PhhRdm4sSJuffee9PU1JR99903r7zySnnM2LFjM3Xq1EyZMiV33HFHlixZkhEjRmTlypVV+1u+xnRcAACADVznzp3bpZ+vKZVK+fa3v52zzjorBx10UJLkRz/6URobG3PttdfmmGOOyeLFi/PDH/4wkydPzj777JMkufrqq7PFFlvk5ptvzn777VfVWiWhAAAA66HW1ta8/PLL7Y7W1tY3HPv444+nubk5/fv3zyc+8Yk8+eSTSZKnnnoqLS0tGTZsWHlsfX199thjj9x5551JklmzZmXFihXtxjQ3N2fgwIHlMdWkCQUAAKigLaWaHePHj09DQ0O7Y/z48avUOHjw4Fx11VX57W9/m8svvzwtLS3Zdddd8+KLL6alpSVJ0tjY2O47jY2N5WstLS3p2rVrNt1004pjqsl0XAAAgPXQmWeemXHjxrU7V19fv8q4/fffv/zzDjvskCFDhuTd7353fvSjH2WXXXZJktTV1bX7TqlUWuXc663OmLUhCQUAAKigVMP/1dfXZ5NNNml3vFET+no9evTIDjvskMcff7z8nujrE8358+eX09GmpqYsX748CxcurDimmjShAAAAHUhra2seeeSR9OvXL/37909TU1OmT59evr58+fLMmDEju+66a5Jk0KBB6dKlS7sxc+fOzYMPPlgeU02m4wIAAGzATjvttBx44IHZcsstM3/+/Hz961/Pyy+/nMMOOyx1dXUZO3Zszj333GyzzTbZZpttcu6556Z79+4ZPXp0kqShoSFHHnlkTj311PTu3Tu9evXKaaedlh122KG8Wm41aUIBAAAqWNP9Omthzpw5+eQnP5kXXnghm222WXbZZZfMnDkzW221VZLk9NNPz7Jly3L88cdn4cKFGTx4cG666ab07NmzfI8JEyakc+fOOfjgg7Ns2bLsvffemTRpUjp16lT1eutKG8JfdQ1ttNGWtS4BgCro272h1iUAUAXPvPRArUtYazv3261mz75v7u01e/a6JAkFAACooC0dLrOrOQsTAQAAUBhJKAAAQAUd8O3FmpOEAgAAUBhNKAAAAIUxHRcAAKACCxNVnyQUAACAwkhCAQAAKihJQqtOEgoAAEBhNKEAAAAUxnRcAACACtrsE1p1klAAAAAKIwkFAACowMJE1ScJBQAAoDCSUAAAgAq8E1p9klAAAAAKowkFAACgMKbjAgAAVGBhouqThAIAAFAYSSgAAEAFFiaqPkkoAAAAhdGEAgAAUBjTcQEAACqwMFH1SUIBAAAojCQUAACgAgsTVZ8kFAAAgMJIQgEAACrwTmj1SUIBAAAojCYUAACAwpiOCwAAUEGp1FbrEjocSSgAAACFkYQCAABU0GZhoqqThAIAAFAYTSgAAACFMR0XAACgglLJdNxqk4QCAABQGEkoAABABRYmqj5JKAAAAIWRhAIAAFTgndDqk4QCAABQGE0oAAAAhTEdFwAAoII203GrThIKAABAYSShAAAAFZRs0VJ1klAAAAAKowkFAACgMKbjAgAAVGCf0OqThAIAAFAYSSgAAEAFbRYmqjpJKAAAAIWRhAIAAFTgndDqk4QCAABQGE0oAAAAhTEdFwAAoII203GrThIKAABAYSShAAAAFViYqPokoQAAABRGEwoAAEBhTMcFAACooC2m41abJBQAAIDCSEIBAAAqsDBR9UlCAQAAKIwkFAAAoII2SWjVSUIBAAAojCYUAACAwpiOCwAAUEHJFi1VJwkFAACgMJJQAACACixMVH2SUAAAAAqjCQUAAKAwpuMCAABUUDIdt+okoQAAABRGEgoAAFCBLVqqTxIKAABAYTShAAAAFMZ0XAAAgAosTFR9klAAAAAKIwkFAACoQBJafZJQAAAACiMJBQAAqEAOWn2SUAAAAAqjCQUAAKAwdSVv2sIGp7W1NePHj8+ZZ56Z+vr6WpcDwFryz3PgX5EmFDZAL7/8choaGrJ48eJssskmtS4HgLXkn+fAvyLTcQEAACiMJhQAAIDCaEIBAAAojCYUNkD19fX5yle+YhELgA2cf54D/4osTAQAAEBhJKEAAAAURhMKAABAYTShAAAAFEYTCgAAQGE0obABuvjii9O/f/9stNFGGTRoUG6//fZalwTAGrjtttty4IEHprm5OXV1dbnhhhtqXRJAYTShsIH5yU9+krFjx+ass87K/fffn9122y37779/nnnmmVqXBsBqWrp0aXbcccdMnDix1qUAFM4WLbCBGTx4cN7//vfnkksuKZ8bMGBARo0alfHjx9ewMgDWRl1dXaZOnZpRo0bVuhSAQkhCYQOyfPnyzJo1K8OGDWt3ftiwYbnzzjtrVBUAAKw+TShsQF544YWsXLkyjY2N7c43NjampaWlRlUBAMDq04TCBqiurq7d51KptMo5AABYH2lCYQPSp0+fdOrUaZXUc/78+aukowAAsD7ShMIGpGvXrhk0aFCmT5/e7vz06dOz66671qgqAABYfZ1rXQCwZsaNG5cxY8Zk5513zpAhQ/L9738/zzzzTI499thalwbAalqyZEn+8pe/lD8/9dRTmT17dnr16pUtt9yyhpUBrHu2aIEN0MUXX5zzzz8/c+fOzcCBAzNhwoTsvvvutS4LgNV06623ZujQoaucP+ywwzJp0qTiCwIokCYUAACAwngnFAAAgMJoQgEAACiMJhQAAIDCaEIBAAAojCYUAACAwmhCAQAAKIwmFAAAgMJoQgFYL5x99tn5t3/7t/Lnww8/PKNGjSq8jqeffjp1dXWZPXt24c8GgH8FmlAA3tThhx+eurq61NXVpUuXLnnXu96V0047LUuXLl2nz73ooosyadKk1RqrcQSADUfnWhcAwPpv+PDhufLKK7NixYrcfvvt+exnP5ulS5fmkksuaTduxYoV6dKlS1We2dDQUJX7AADrF0koAG+pvr4+TU1N2WKLLTJ69OgceuihueGGG8pTaK+44oq8613vSn19fUqlUhYvXpyjjz46ffv2zSabbJK99torf/zjH9vd8xvf+EYaGxvTs2fPHHnkkfmf//mfdtdfPx23ra0t5513XrbeeuvU19dnyy23zDnnnJMk6d+/f5Jkp512Sl1dXfbcc8/y96688soMGDAgG220Ud7znvfk4osvbvece+65JzvttFM22mij7Lzzzrn//vur+JcDAF5PEgrAGuvWrVtWrFiRJPnLX/6Sn/70p7n++uvTqVOnJMkBBxyQXr165cYbb0xDQ0Muu+yy7L333nnsscfSq1ev/PSnP81XvvKVfO9738tuu+2WyZMn5zvf+U7e9a53VXzmmWeemcsvvzwTJkzIBz/4wcydOzePPvpoklcbyX//93/PzTffnPe+973p2rVrkuTyyy/PV77ylUycODE77bRT7r///hx11FHp0aNHDjvssCxdujQjRozIXnvtlauvvjpPPfVUTjnllHX81wOAf22aUADWyD333JNrr702e++9d5Jk+fLlmTx5cjbbbLMkyS233JIHHngg8+fPT319fZLkggsuyA033JDrrrsuRx99dL797W/niCOOyGc/+9kkyde//vXcfPPNq6Shr3nllVdy0UUXZeLEiTnssMOSJO9+97vzwQ9+MEnKz+7du3eamprK3/va176Wb33rWznooIOSvJqYPvzww7nsssty2GGH5ZprrsnKlStzxRVXpHv37nnve9+bOXPm5Ljjjqv2nw0A+F+m4wLwln71q19l4403zkYbbZQhQ4Zk9913z3e/+90kyVZbbVVuApNk1qxZWbJkSXr37p2NN964fDz11FN54oknkiSPPPJIhgwZ0u4Zr//8fz3yyCNpbW0tN76rY8GCBXn22Wdz5JFHtqvj61//ers6dtxxx3Tv3n216gAA/nmSUADe0tChQ3PJJZekS5cuaW5ubrf4UI8ePdqNbWtrS79+/XLrrbeucp+3v/3ta/X8bt26rfF32trakrw6JXfw4MHtrr02bbhUKq1VPQDA2tOEAvCWevToka233nq1xr7//e9PS0tLOnfunHe+851vOGbAgAGZOXNmPv3pT5fPzZw5s+I9t9lmm3Tr1i2/+93vylN4/6/X3gFduXJl+VxjY2Pe8Y535Mknn8yhhx76hvfdfvvtM3ny5Cxbtqzc6L5ZHQDAP890XACqap999smQIUMyatSo/Pa3v83TTz+dO++8M1/84hdz3333JUlOOeWUXHHFFbniiivy2GOP5Stf+UoeeuihivfcaKONcsYZZ+T000/PVVddlSeeeCIzZ87MD3/4wyRJ3759061bt0ybNi3z5s3L4sWLkyRnn312xo8fn4suuiiPPfZYHnjggVx55ZW58MILkySjR4/O2972thx55JF5+OGHc+ONN+aCCy5Yx38hAPjXpgkFoKrq6upy4403Zvfdd88RRxyRbbfdNp/4xCfy9NNPp7GxMUlyyCGH5Mtf/nLOOOOMDBo0KH/961/fcjGgL33pSzn11FPz5S9/OQMGDMghhxyS+fPnJ0k6d+6c73znO7nsssvS3NycD3/4w0mSz372s/nBD36QSZMmZYcddsgee+yRSZMmlbd02XjjjfPLX/4yDz/8cHbaaaecddZZOe+889bhXwcAqCt5IQYAAICCSEIBAAAojCYUAACAwmhCAQAAKIwmFAAAgMJoQgEAACiMJhQAAIDCaEIBAAAojCYUAACAwmhCAQAAKIwmFAAAgMJoQgEAACiMJhQAAIDC/H+fG1CbJ9HePwAAAABJRU5ErkJggg==",
+      "text/plain": [
+       "<Figure size 1200x800 with 2 Axes>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import seaborn as sns\n",
+    "plt.figure(figsize=(12, 8))\n",
+    "sns.heatmap(confusion_matrix(y_test, y_pred), annot =True)\n",
+    "plt.xlabel('Predicted')\n",
+    "plt.ylabel('Actual')\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 86,
+   "id": "cb88df0c-dd46-4289-939e-f8cef90ed494",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.9765895184889598"
+      ]
+     },
+     "execution_count": 86,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model_C = SVC(C=2)\n",
+    "model_C.fit(X_train, y_train)\n",
+    "model_C.score(X_test, y_test)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 87,
+   "id": "b76c31bc-961d-4956-bfe6-051cc9d655d0",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.919659483905294"
+      ]
+     },
+     "execution_count": 87,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model_g = SVC(gamma=10)\n",
+    "model_g.fit(X_train, y_train)\n",
+    "model_g.score(X_test, y_test)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 88,
+   "id": "821b0b5b-66e9-4b4c-84fa-b1756e6c5cd3",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.9747273210960362"
+      ]
+     },
+     "execution_count": 88,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model_linear_kernal = SVC(kernel='linear')\n",
+    "model_linear_kernal.fit(X_train, y_train)\n",
+    "model_linear_kernal.score(X_test, y_test)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8ffeb857-9e98-41cd-a6de-c45b68b0a78b",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.4"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
